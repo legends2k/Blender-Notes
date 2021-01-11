@@ -1,0 +1,76 @@
+#+TITLE: Blender Materials
+#+OPTIONS: toc:2
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+# refer https://github.com/fniessen/org-html-themes for themes
+# refer https://github.com/fniessen/refcard-org-mode for usage with examples
+# another option: https://github.com/gongzhitaao/orgcss
+
+
+  * Objects in the real-world are categorized into two: dielectric and metal/conductor
+    - Dielectric has diffuse, reflects and refracts; reflections aren't coloured
+    - (Pure) Metal has no diffuse, pure gloss; reflects but all refracted light gets absorbed. They've coloured reflection.
+  * [[https://disney-animation.s3.amazonaws.com/library/s2012_pbs_disney_brdf_notes_v2.pdf][Principled Shader]] was created for consistency in materials irrespective of their environment e.g. no change needed when rendered in daylight or a night scene.
+    - In-built Fresnel effect (no slider for it)
+    - Proper roughness: Fresnel computations takes roughness into account
+    - Metalness workflow: apps like Substance Painter asks to pick one
+    - Goodies
+      + Subsurface Scattering (skin, flesh, etc.)
+      + Anisotrophy (brushed metal, fry pan back with stretched reflection)
+      + Sheen (fabric)
+      + Clearcoat
+  * [[http://filmicworlds.com/blog/everything-has-fresnel/][Everything has Fresnel]] effect
+    - Reflections on an object increase from centre (2-5%) to edges (90%) /for the viewer/
+    - Even non-shiny objects like bricks has Fresnel effect
+    - Reflection tapers off in angle as it gets closer to the viewer (e.g. mountain's reflection on lake; near our feet: less reflection, more transmission -- farther near mountains: more reflection, less transmission). Since angle of incidence increases with the distance and reflection/refraction increases with angle of incidence.
+    - Objects have microfacets; roughness increases, Fresnel decreases
+  * /Viewport Shading/ may be set to /Solid/ and /Color/ be set to /Material/ but still you'd not see the actual rendering material in viewport
+  * In an Object's /Material Properties/, creating a new material and changing its /Viewport Display/ settings would change it for the viewport but not in the rendering
+  * To preview an object's rendered material in viewport, change shading to /Rendered/ or /Material Preview/
+  * /Material Preview/ always uses /Eevee/ irrespective of the scene's chosen renderer
+    - Change material preview's environment HRDI from the viewport shading dropdown; this will help see how material looks like in different lighting conditions
+  * Roughness is directly proportional to sharpness of highlights; more matte-y
+  * Material Slots, not materials, are assigned to objects and/or faces (parts of the object)
+    - Materials are assigned to material slots
+    - Materials themselves are shared between different objects; slots are not
+    - Slots are by default part of (object) Data, so instances sharing object data thereby share slots too.  This can be changed per-material to link to Object.
+  * Be mindful of [[https://blender.stackexchange.com/q/32657/53932][Blender's ref. counting]]; add a /Fake User/ if a material isn't used (yet)
+    - Everything is a data-block in Blender and this idea applies to all data-blocks
+  * A node is just a function's visualization; it has some inputs and outputs
+    - Parameters can be edited on the node itself or driven by feeding an external input
+    - Input/Output sockets are colourized by data type
+      + Gray: Scalar float
+      + Yellow: Colour
+  * Fastest shader is Glossy BSDF with Roughness 0 then Diffuse and finally Glossy with roughness; when roughness hits 1 it's essentially a Diffuse shader
+  * Glossy's roughness controls how sharp or blurry; not the amount of reflection
+  * Diffuse's roughness matters only in the object's edges; the colour in the edge is very slightly brighter when roughness is 0 (Fresnel effect)
+  * Dielectric objects never have their reflection tinted; 0 out Saturation from Glossy's colour
+  * Anisotropic i.e. not the same in all directions; Anisotrophy set to 0 = Glossy shader
+  * Scene's Renderer decides nodes that can be added to the /Shader Editor/ e.g. /Shader to RGB/ is only available in Eevee
+  * /Toon BSDF/ node only works in Cycles; Eevee ignores /Glossy/ setting and behaves as /Diffuse/
+    - For toon sharing Eevee has a workflow unique that's arguably more power: Shader to RGB; useful for non-photorealistic rendering (NPR)
+  * [[https://www.blenderguru.com/tutorials/2017/6/21/how-to-use-blenders-new-ultimate-shader-principled-bsdf][Blender's Principled Shader]]
+    - Most frequently used
+      + /Base Color/ (textures go here)
+      + /Metallic/ (usually 0.0 or 1.0; 1.0 for metals)
+      + /Roughness/: use this reflectivity, not Specular
+      + /Normal/: Bump map for object
+    - /Specular/: usually untouched if needing photorealism; default (0.5) is set correct for an object with IOR 1.5 i.e. IOR of most dielectric materials.
+    - /Specular Tint/: usually untouched if needing photorealism; already at right default.  Adds base colour to specular highlights i.e. reflection.  /Metallic/ takes care of doing this for metals and shouldn't be done for dielectric anyways.
+    - /Distribution/: Multiscatter GGX vs GGX.  There's very little difference in toggling.
+    - /Anisotropic/: Stretched reflection
+    - /Tangent/: For anisotrophy, controls reflection's direction
+    - /Sheen/Sheen Tint/: Fabric is the only use.  With /Specular/ off you see a very slight reflection.  /Tint/ adds in /Base Color/ to the reflection.
+    - /Clearcoat/: Some materials have two layers to them e.g. metallic car paint; paint is the clear coating atop car's surface
+    - /Clearcoat Roughness/ determines how smooth the coat is.  Clearcoat Normal decides bump map for the coat itself.
+    - /Transmission/: Refraction; fully opaque (0) to fully glass-like (1)
+    - /IOR/: Transmission's Index of Refraction; expects dielectric material (/Metallic/: 0)
+
+** Hotkeys
+
+   /Viewport Shading -> Rendered/
+
+  * Set Preview Box: ~Ctrl + B~
+  * Clear Preview Box: ~Ctrl + Alt + B~
+
+** Node Wrangler
+   * Plug in shader: ~Shift + Ctrl + PMB~

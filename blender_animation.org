@@ -1,0 +1,124 @@
+#+TITLE: Animation in Blender
+#+OPTIONS: toc:2
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+# refer https://github.com/fniessen/org-html-themes for themes
+# refer https://github.com/fniessen/refcard-org-mode for usage with examples
+# another option: https://github.com/gongzhitaao/orgcss
+
+* General Animation
+
+  * Good to have 30 fps when animating for games since game engines usually up-sample it to 60 fps.  30 is good since it's a multiple of 60; the engine needs to just generate 1 intermediate frame; while for 24 it has to generate 2.4 frames; unclean
+  * If you want a 60 frame animation, duplicate key at frame 1 to frame 61 and set the animation to end at frame 60; so the first keyframe isn't played twice and the animation loops seamlessly correctly.  The intermediate key is usually at frame 31.
+  * Animating lesser number of frames is easier for the animator
+  * PlayBlast is playing an animation externally using OpenGL renderer
+    - /Simplify/ can be disabled since performance should be much better unlike viewport animation rendering
+    - a.k.a. viewport render or OpenGL render
+  * Rotation, not around origin, means not just rotation but location too is changed
+
+* Blender Concepts
+
+  * Almost anything can be animated in Blender; each is called a channel e.g. object's Z-location is a channel
+  * Manually specify a channel's value for a frame; that is a key frame
+    - Inbetweening: Channel's values are interpolated between keyframes automatically
+      + Key frames are like I-frames (intra-coded) in [[https://en.wikipedia.org/wiki/Video_compression_picture_types][video compression]]
+      + Intermedia frames are like P-frames (predicted)
+  * [[https://docs.blender.org/manual/en/2.91/animation/introduction.html][Channel Colour scheme]]
+    - Gray: Unanimated channel
+    - Green: Animated but current frame isn't a keyframe
+    - Yellow: Animated and current frame is key
+    - Orange: Animation data changed and unsaved (adding key renders it yellow)
+    - Purple: Driver controlled
+  * Viewport always renders an animation at 24 fps irrespective of the actual (render) frame rate set; when displaying an animation; if 24 fps target can't be hit, it shows the fps in red
+    - Improve performance of viewport animation playback by
+      + Enabling /Simplify/ in Render properties panel and reduce the maximum Subsurf iterations allowed
+      + Hide anything unnecessary
+      + Turn on AV/Sync
+  * Autokeying automatically adds a keyframe when any of the LocRotScale channel for an object is changed
+    - To change the keying set, do it and activate the autokey flag to honour the keying set
+    - It's convenient when you're in an animation workflow and don't want to add keyframes manually
+    - It's also risky that it might overwrite useful keyframes or add unnecessary keyframes
+  * Even if Autokeying, set the first keyframe manually if you're editing the channel value directly as it doesn't set a keyframe
+  * It's good practice to insert a keyframe, remove unneeded channels, set /Keying Set/ to /Available/ and enable Autokeying and make it respect /Active Keying Set/
+  * Armature / Rig: special object made specifically for animation
+    - They're made of bones; bones are controls to animate parts of a mesh
+    - Bones are animated in /Pose Mode/
+    - Pose Mode comes up only when an armature object is selected (~Ctrl + Tab~)
+    - ~Tab~ in Pose Mode shifts to Edit Mode; now Tab toggles b/w these
+    - ~Ctrl + Tab~ in Pose Mode shifts to Object Mode
+  * Meshes can be animated with/out a rig but when there's complicated move/deform needed use a rig e.g. characters, props and cameras
+    - Object-level animation is enough for rotational and translational animations.  Reason: mesh itself doesn’t undergo any animation; just the object's transforms need to be animated, while rigs are needed for mesh animation
+  * Use the /Graph Editor/ when you want to change how the animation behaves; use the /Timeline/ when you want purely adjust keyframes' timing
+  * Animation F-curves/channels' RGB correspond to XYZ
+  * Channels can be un/grouped
+  * Pivot Point and Cursor (horizontal line; playhead is the vertical line) help working in /Graph Editor/ like on /3D Viewport/
+    - They decide how keyframes are moved, scaled or rotated
+  * Motion Paths is a good way to visualize the path of an animated object/armature
+  * [[https://docs.blender.org/manual/en/latest/editors/graph_editor/fcurves/introduction.html][F-curve]] shows how a channel's value (Y) changes over time (X).  It shows how fast/slow inbetweening is and also decides the path taken by an object e.g. to make a ball follow a circular path, making 5 keyframes at 0, 90, 180, 270, 360° is enough; the default non-circular path can be [[https://cgcookie.com/questions/12835-not-getting-a-circular-motion-path-even-after-updating-unless-i-make-cyclic-on-extrapolation-mode#answer-47528][made circular by adjusting the X-location F-curve's start and end keyframe tangents]].
+  * F-curve
+    - Modifiers are applicable e.g. Cycles (repeating/looping forever or an interval by copying first keyframe to the last and continuing in a cycle)
+    - When transforming keys make sure you make them end up in frames and not subframes
+      + /Automatic Time Snap/ setting defaults to /Nearest Frame/, so just pressing ~G~ and enter sets the keyframe to frame
+      + Check if /Properties Panel -> Active Keyframe -> Key Frame/ is an integer
+    - Add a keyframe in Graph Editor using ~Ctrl + PMB~; make sure the key snaps to a frame and not a subframe
+    - Keys have handles with changeable type; tangent colour indicates type
+      + Free (Black): free floating
+      + Vector (Green): Automatic and direction-keeping; grab a handle and it becomes Free
+      + Aligned (Pink): Seesaw
+      + Automatic (Yellow): Maintains curve's smoothness when key/handle is manipulated, without kinks; grab and it becomes Aligned
+        * Problem: With /Automatic/ handles, manipulating one part of the curve can affect another that's automatically managed. Fix by setting F-curve's /Auto Handle Smoothing/ to /None/ from /Continuous Acceleration/ but this leads to kinks in the curve. A better option is to set wanna-stay-put keyframe's handle to something other than /Automatic/.
+      + Auto-clampled (Orange; default): Like automatic but is limiting
+    - [[https://docs.blender.org/manual/en/latest/interface/controls/buttons/decorators.html][Property/Field Decorators]]
+      + Solid diamond: current frame is key; click to remove
+      + Hollow diamond: Keyed in another frame; click to keyframe
+      + Sigmoid arrow: driven
+      + Dot: Not animated
+    - If Interpolation is Bezier, both keys and tangent handles have Handle Type; changing it for a key changes the type for both handles
+    - If a section of an F-curve is to be Linear keeping rest as /Bezier/, choose the section (three keys) and change handle type to /Vector/; this linearizes it
+      + If you just want one side of a key to be linear, select one handle of the central key and the other key of that side and change type to /Vector/
+    - Normalize to visualize all curves within visible area; it doesn't change any values; it just changes visualization by displaying in [0, 1] for display
+    - Use /Ghost/ Curves to display old curve when editing a curve
+    - /View -> Show Sliders/ is useful to display the channel values as a slider
+    - Channels have options to toggle editability, visibility, on/off and modifiers
+    - Interpolation type of /Constant/ is also called
+      + /Stepped/ as curve looks like a staircase
+      + /Hold/ as position is held until next keyframe is hit
+    - Extrapolation mode defines how F-curve gets extrapolated before the first and after the last keyframe; default is /Constant/; other interesting options
+      + Linear
+      + Cyclic
+    - For constant extrapolation on one side and linear on another, set to /Extrapolation Mode/ to /Constant/ and duplicate the first/last keyframe to make the tangent constant on a side
+  * Change handle to vector when you want abrupt bouncy animation i.e. the graph should've a [[https://math.stackexchange.com/a/380936][cusp]] e.g. bouncing ball's bounce
+
+* Hotkeys
+
+** Timeline
+
+  * Back / Forward one frame: ~Left/Right~
+  * Next / Prev key frame: ~Up/Down~
+  * Go to start or end frame: ~Shift + Left/Right~
+  * Play: ~Shift + Space~
+  * Play backwards: ~Shift + Ctrl + Space~
+  * Set current frame as start frame: ~Ctrl + Home~
+  * Set current frame as end frame: ~Ctrl + End~
+  * Set/Clear preview frame range: ~P / Alt + P~
+  * Bring entire keyframe range into view: ~Home~
+  * Zoom into selected keyframes: ~.~
+  * Centre view to playhead: ~Num 0~
+  * Select keyframes on playhead's left/right: ~[~ / ~]~
+  * Snap keyframe: ~Shift + S~
+
+  * Insert Keyframe: ~I~
+    - Choose an active Keying Set in Timeline window to avoid selecting keyed channel every time hotkey is pressed
+    - Hovering over a property and pressing I leads to keyframing only that property
+  * Remove Keyframe: ~Alt + I~
+  * Usual Object Mode keys work too like ~Shift + D~ to duplicate, ~X~ to delete, ~G~ to grab, etc.
+
+** Graph Editor
+
+  * Select Column: ~K~
+  * Interpolation function: ~T~
+  * Keyframe handle: ~V~
+  * Extrapolation Mode: ~Shift + E~
+  * Toggle Channel F-curve editability: ~Tab~
+  * [[https://docs.blender.org/manual/en/2.91/editors/graph_editor/fcurves/editing.html][Key -> Transform -> Extend]] (relative to mouse and playhead): ~E~
+  * Add F-curve modifier: ~Shift + Ctrl + M~
+  * Keyframe Easing Type: ~Ctrl + E~

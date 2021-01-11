@@ -1,0 +1,148 @@
+#+TITLE: Modelling Hotkeys in Blender
+#+OPTIONS: toc:2
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+# refer https://github.com/fniessen/org-html-themes for themes
+# refer https://github.com/fniessen/refcard-org-mode for usage with examples
+# another option: https://github.com/gongzhitaao/orgcss
+
+/Shortcuts are handled by the [[https://en.wikibooks.org/wiki/Blender_3D:_Noob_to_Pro/Blender_Windowing_System#The_Active_Window][active window]] (one under mouse pointer)./
+
+* Modelling Hotkeys
+
+** Practising
+
+| Operation                            | Key                      | Mods                                                                                                                                                          | Notes                                                                    |
+|--------------------------------------+--------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------|
+| Edge/Vertex/Face Slide               | ~G G~                    |                                                                                                                                                               |                                                                          |
+| Join Vertex Path                     | ~J~                      |                                                                                                                                                               |                                                                          |
+| Fill with Triangles                  | ~Alt + F~                |                                                                                                                                                               |                                                                          |
+| Split                                | ~Y~                      |                                                                                                                                                               |                                                                          |
+| Separation (Partition)               | ~P~                      |                                                                                                                                                               |                                                                          |
+| Loop Cut                             | ~Ctrl + R~               |                                                                                                                                                               |                                                                          |
+| Edge Offset Slide                    | ~Shift + Ctrl + R~       |                                                                                                                                                               |                                                                          |
+| Inset                                | ~I~                      | ~O~ outset; ~B~ boundary; ~I~ individual                                                                                                                      | [[https://cgcookie.com/articles/10-blender-hotkeys-to-boost-your-blender-productivity][hold ~Ctrl~ to extrude + scale]]                                           |
+| Bevel Edge/Face                      | ~Ctrl + B~               |                                                                                                                                                               |                                                                          |
+| Bevel Vertex                         | ~Shift + Ctrl + B~       |                                                                                                                                                               |                                                                          |
+| Extrude (mesh or curve)              | ~E~                      | ~S~ scale                                                                                                                                                     |                                                                          |
+| Extrude Menu                         | ~Alt + E~                |                                                                                                                                                               |                                                                          |
+| Knife                                | ~K~                      | ~Ctrl~ snap to edge centre, ~Shift~ prevent vertex and edge snap, ~⏎~ to confirm, ~E~ to start new cut, ~C~ to snap to angles, double click to close cut loop |                                                                          |
+| Knife selected                       | ~Shift + K~              |                                                                                                                                                               |                                                                          |
+| Rip / Rip-Fill Vertex                | ~V~ / ~Alt + V~          |                                                                                                                                                               |                                                                          |
+| Mirror Transform                     | ~Ctrl + M~ + axis        |                                                                                                                                                               |                                                                          |
+| Shrink/Flatten                       | ~Alt + S~                |                                                                                                                                                               |                                                                          |
+| Triangulate                          | ~Ctrl + T~               |                                                                                                                                                               |                                                                          |
+| Tris to Quads                        | ~Alt + J~                |                                                                                                                                                               |                                                                          |
+| Curve/Mesh Conversion                | ~Alt + C~                |                                                                                                                                                               |                                                                          |
+| Edge Crease                          | ~Shift + E~              |                                                                                                                                                               |                                                                          |
+| Join Objects                         | ~Ctrl + J~               |                                                                                                                                                               |                                                                          |
+| Clear Transform                      | ~Alt + {S, R, G}~        |                                                                                                                                                               |                                                                          |
+| Merge Menu                           | ~M~                      |                                                                                                                                                               |                                                                          |
+| Split Menu                           | ~Alt + M~                |                                                                                                                                                               |                                                                          |
+| Apply Transform                      | ~Ctrl + A~               |                                                                                                                                                               |                                                                          |
+| Transform Pivot Only                 | ~Ctrl + .~               |                                                                                                                                                               |                                                                          |
+| Snap Pie Menu                        | ~Shift + S~              |                                                                                                                                                               | Snap cursor and selected                                                 |
+| Snap Options                         | ~Shift + Ctrl + Tab~     |                                                                                                                                                               |                                                                          |
+| Cursoft to Origin                    | ~Shift + C~              |                                                                                                                                                               |                                                                          |
+| Wireframe View Toggle                | ~Shift + Z~              |                                                                                                                                                               |                                                                          |
+| X-Ray Vision Toggle                  | ~Alt + Z~                |                                                                                                                                                               |                                                                          |
+| Transform Axes pie menu              | ~,~                      |                                                                                                                                                               |                                                                          |
+| Transform Pivot menu                 | ~.~                      |                                                                                                                                                               |                                                                          |
+| Zoom to Box                          | ~Shift + B~              |                                                                                                                                                               |                                                                          |
+| Set Render Box                       | ~Ctrl + B~               | ~Alt~ to clear                                                                                                                                                |                                                                          |
+| Clip Box Toggle                      | ~Alt + B~                |                                                                                                                                                               |                                                                          |
+| Centre View to Pointer               | ~Alt + MMB~              |                                                                                                                                                               |                                                                          |
+| Frame Selected                       | ~.~                      |                                                                                                                                                               |                                                                          |
+| Frame All                            | ~Home~                   |                                                                                                                                                               |                                                                          |
+| Local View                           | ~/~                      |                                                                                                                                                               |                                                                          |
+| View 4 Octants                       | ~Ctrl + Alt + Q~         |                                                                                                                                                               |                                                                          |
+| View Plane Parallel to Selected Face | ~Shift + {7, 1, 3}~      | ~Ctrl~ to view opposite direction                                                                                                                             |                                                                          |
+| Last Used Tool Options               | ~F9~                     |                                                                                                                                                               |                                                                          |
+| Repeat Last Operation                | ~Shift + R~              |                                                                                                                                                               |                                                                          |
+| Dissolve Selection                   | ~Ctrl + X~               |                                                                                                                                                               |                                                                          |
+| Normals menu                         | ~Alt + N~                |                                                                                                                                                               |                                                                          |
+| Recalculate Outside                  | ~Shift + N~              |                                                                                                                                                               |                                                                          |
+| Recalculate Inside                   | ~Shift + Ctrl + N~       |                                                                                                                                                               |                                                                          |
+| Tools Panel Toggle                   | ~T~                      |                                                                                                                                                               |                                                                          |
+| View Properties Panel Toggle         | ~N~                      |                                                                                                                                                               |                                                                          |
+| Deselect Specific Element            | ~MMB~                    |                                                                                                                                                               |                                                                          |
+| Invert Selection                     | ~Ctrl + I~               |                                                                                                                                                               |                                                                          |
+| Box/Circle Selection                 | ~B~ / ~C~                | Drag to add, ~Shift~ to subtract                                                                                                                              |                                                                          |
+| Lasso Select                         | ~Space + L~              | ~Shift~ to add, ~Ctrl~ to subtract                                                                                                                            | assuming ~Space~ is set to Tools                                         |
+| Select Edge Loop                     | ~Alt + SMB~              |                                                                                                                                                               |                                                                          |
+| Select Edge Rings                    | ~Ctrl + Alt + SMB~       |                                                                                                                                                               |                                                                          |
+| Select Along Shortest Path           | ~Ctrl + SMB~             | ~Shift~ to select area instead of path                                                                                                                        |                                                                          |
+| Select Linked                        | ~Ctrl + L~               |                                                                                                                                                               | useful to select different islands by having one vertex in each selected |
+| Select Island under Pointer          | ~L~                      | ~Shift~ to subtract                                                                                                                                           |                                                                          |
+| Select Similar                       | ~Shift + G~              |                                                                                                                                                               |                                                                          |
+| Mirror Selection                     | ~Shift + Ctrl + M~       |                                                                                                                                                               | Flips selection to opposite side of mesh along an axis                   |
+| Select Next Active                   | ~Shift + Ctrl + NumPlus~ |                                                                                                                                                               | increases selection [[https://cgcookie.com/questions/13081-not-a-question-but-a-tip][respecting existing selection fashion]]                |
+| Hide Selected                        | ~H~                      |                                                                                                                                                               |                                                                          |
+| Hide Unselected                      | ~Shift + H~              |                                                                                                                                                               |                                                                          |
+| Unhide                               | ~Alt + H~                |                                                                                                                                                               |                                                                          |
+| Duplicate                            | ~Shift + D~              |                                                                                                                                                               |                                                                          |
+| Duplicate Linked/Instance            | ~Alt + D~                |                                                                                                                                                               | Both objects use the same data                                           |
+| Set Parent                           | ~Ctrl + P~               |                                                                                                                                                               |                                                                          |
+| Clear Parent                         | ~Alt + P~                |                                                                                                                                                               |                                                                          |
+| Move Selected to Collection          | ~M~                      |                                                                                                                                                               |                                                                          |
+| Collection Visibility Toggle         | ~Digit~                  | ~Shift~ to include more collections                                                                                                                           |                                                                          |
+| Change Mode                          | ~Ctrl + Tab~             |                                                                                                                                                               |                                                                          |
+| Vertex/Edge/Face menu                | ~Ctrl + {V, E, F}~       |                                                                                                                                                               |                                                                          |
+| Fullscreen Pane                      | ~Shift + Alt + Z~        |                                                                                                                                                               |                                                                          |
+| Annotate                             | ~D~                      | hold and ~PMB~ to write, ~SMB~ to erase                                                                                                                       |                                                                          |
+| Navigate Pie Menu                    | ~`~                      |                                                                                                                                                               | Useful on laptops; check Preferences -> Keymap -> 3D View                |
+
+** Committed
+
+  * Translate: G (X/Y/Z axis to lock; press again to switch b/w active (local if global is active), global and view; Shift + X/Y/Z to move in all but that axis)
+  * Scale: S (modifiers same as translate)
+  * Rotate: R (modifiers same as translate)
+  * Rotate Trackball: R R
+
+  * Edit {vertices, edges, faces}: 1, 2, 3
+  * Toggle in/out of Edit Mode: Tab
+  * Select all/none: A / Alt + A
+  * Select circle/box: C, B (PMB select, MMB unselect)
+  * Context Menu: W
+  * Delete: X
+  * Dissolve Selection: Ctrl + X
+
+These terms are relative to the viewer
+
+  * View (back) front: (Ctrl + ) 1
+  * View (bottom) top: (Ctrl + ) 7
+  * View (left) right: (Ctrl + ) 3
+  * View other side: 9
+  * Camera view: 0
+
+  * Make viewport the camera view: Ctrl + Alt + 0
+
+  * Add mesh: Shift + A
+
+* UI Shortcuts
+
+  * ~Click~ on a panel arrow to collapse/expand one, while clicked drag up or down to do the same to other panels too
+  * ~Ctrl + click~ a panel to expand just that and collapse its siblings else
+  * Zoom a region with panels with ~Ctrl + MMB~ drag; hover over window and press ~Home~ to reset zoom
+  * In Properties Window, hover the mouse over some pane area and switch to different tabs with ~Ctrl + wheel~.  See [[https://docs.blender.org/manual/en/latest/interface/window_system/tabs_panels.html][documentation on tabs and panels]].
+  * Hold ~Shift~ and click-drag a numeric input box to alter its value in finer steps.  While dragging use ~Ctrl~ to make the steps discrete.  ~Ctrl + wheel~ makes the steps more finer.
+  * Negate a field by pressing minus when hovering over it; use / for reciprocal.
+  * [[https://blender.stackexchange.com/a/94346/53932][Angle input suffixes]]: (d)egrees and (r)adians
+  * Hold ~Alt~ to apply edit to all selected entities, not just the active selection
+  * Expressions can be typed into numeric fields e.g. ~pi * sqrt(2) - 1.2~ (they can even be animated with [[https://docs.blender.org/manual/en/latest/animation/drivers/index.html][Drivers]]).
+  * Multiple fields can be edited to the same value by ~PMB~ click and drag and then type/drag a value.  See [[https://docs.blender.org/manual/en/latest/interface/controls/buttons/fields.html][documentation on fields]].
+  * To copy a colour, hover the mouse over a colour box, ~Ctrl + C~ and do the same with ~Ctrl + V~ in a target colour box.  Alternatively, drag-drop from source to destination!
+  * Change a colour field with an eye dropper by hovering over it and pressing E.  Select a colour from anywhere on the screen (click and drag averages the colours).
+  * Value (darkness) of a colour can be changed with ~Ctrl~ + mouse wheel 
+  * On Colour Picker, hold ~Ctrl~ to snap to primary colours; hold ~Shift~ to be precise; wheel to adjust brightness and Backspace to reset
+  * Fit entire animation span to Timeline window with Home key
+  * Reset an entity (e.g. scale) by hovering over it and pressing ~Backspace~; can be dragged to reset multiple entities (hold ~Ctrl~ to reset just one fields of an entity)
+  * Copy an entity's property value to others by selecting them all (making sure the source is the active selection), right-clicking on the field -> Copy Single To Selected.  If it's a vector like location (x, y, z), then Copy All to Selected will copy all the elements of the field.
+  * ~Alt + SMB~ to select occluded objects
+  * Paths starting ~//~ is a handy way to specify the directory where current .blend is at
+  * Outliner has toggleable options for objects to be selectable, current viewport visibility, render visibility and disable i.e. visibility in all view layers including linked scenes in other .blend files; quite useful
+  * Camera with a filled up arrow is the Active one; useful in a multi-camera scene
+
+* References
+
+  * https://www.katsbits.com/tutorials/blender/useful-keyboard-shortcuts.php
+  * https://www.giudansky.com/illustration/infographics/blender-map

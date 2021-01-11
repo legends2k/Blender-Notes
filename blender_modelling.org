@@ -1,0 +1,147 @@
+#+TITLE: Modelling in Blender
+#+OPTIONS: toc:2
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+# refer https://github.com/fniessen/org-html-themes for themes
+# refer https://github.com/fniessen/refcard-org-mode for usage with examples
+# another option: https://github.com/gongzhitaao/orgcss
+
+* Glossary
+
+  * [[https://topologyguides.com/manipulating-edge-poles][Pole]] :: vertex where 3, 5 or more edges meet
+  * Island :: isolated (disjoint) part of a mesh
+  * Chamfer :: transitional edge between two faces of an object; helps add [[https://blender.stackexchange.com/a/248/53932][realism by avoiding razor edges]]
+  * Dissolve :: remove geometry and fill with surrounding geometry without leaving holes
+  * Object :: invisible [[https://docs.blender.org/manual/en/latest/glossary/index.html#term-Object][container of its contents]] with its own frame (origin and axes); sometimes can be thought of the ultimate modifier applying its transforms to inner data
+    - Objects have some internal data e.g. mesh data, light data, camera data, etc.
+    - Duplicated objects have the same object data but different object space transforms
+  * [[https://blender.stackexchange.com/q/7910/53932][Non-manifold Geometry]] :: Geometry that cannot exist in real world
+  * Edge Loop :: continuous (poles lead to discontinuity) path of connected edges
+  * Face Loop :: continuous path of connected faces; they usually change direction at pole
+    - Edge Ring :: continuous path of parallel edges; similar to face loops but just the edges connecting two parallel edge loops
+  * Eevee :: Real-time rendering engine with PBR support (using OpenGL); akin to ones used in video games
+  * Cycles :: Unbiased (physically more accurate compared to Eevee), ray-traced high-realism renderer; similar to the ones used in movies
+  * Loft :: bridging edge loops and creating a tubular/bridge-like structure
+
+* Guidelines
+
+  * [[https://www.youtube.com/watch?v=OVbIOHAI3iY&lc=Ugz9E0pU8bR23XgHwmp4AaABAg][Thumb rule]]: *Your model details need only fit the use of the model*.  /If a deck of cards will only sit on the table in a stack, why model all 52 cards?/  Sometimes we get caught up in the challenge of modelling highly detailed models.  If you model strictly for the challenge then by all means model every single card in the deck.  But if your model has a purpose, such as an animation prop, a game content prop, or detail for a "still" then consider how much detail is actually necessary for that model to fulfil it's purpose.  If a car rumbles past in the background, you don't need to model the interior.  You probably don't need to detail a lot of the trim of the car and let the applied texture do most of the work.  Maybe you will know the car doesn't actually have chrome trim around the windows included in the mesh, but no one else will know that.
+    - Models that are small or farther [[https://youtu.be/ckOTl2GcS-E?t=123][away from the camera can have a lower subdivision levels]] than closer ones
+    - Use /Smooth Shading/ (Gouraud or Phong) to make the model /look/ smooth (no impact on geometry)
+  * One of the reasons to avoid n-gons is when subdividing, [[https://youtu.be/ckOTl2GcS-E?t=217][splines end instead of flowing]] and mesh doesn't smooth the way we expect it to.  This leads to [[https://cgcookie.com/articles/guide-to-clean-topology][study of topology]]: key to models that subdivide well when animated
+    - In Blender, when in /Face select/ mode and [[https://www.youtube.com/watch?v=lITV4F_P4E0&list=PLjEaoINr3zgHJVJF3T3CFUAZ6z11jKg6a&index=4][select edge rings to see if the flow is all around the model]]
+  * N-gons are okay if surface is completely flat, not animated and subsurf modifier isn't going to be applied.  Triangles are better than n-gons when modelling for games.
+    - N-gons and Tri break the models flow; loop cuts don't work since with tris and n-gons it doesn't know which direction to proceed after hitting one
+    - Subsurf works badly with n-gons
+    - Need conversion to tris or quads for UV unwrapping
+    - Bevel tool can create n-gons on its own
+  * Use poles to direct edge loops intelligently defining the features /flow of the model e.g. face loop forming the jaw descends from the near the cheek, hits a pole and gets diverted to form a sharp jaw line instead of melting straight into the neck
+  * Junctions are created to make edge loops change direction; all-quad junctions are better. Use all-quad junctions with poles to
+    - Redirect topology
+    - Keep details localized i.e. adding detail in one area of a mesh shouldn't affect other parts of it.  Another option is to make disjoint islands of mesh within the same object e.g. a detailed car handle can be an island not affecting the car.
+  * It's better to have evenly spaced quads i.e. reasonably square-shaped
+  * More details needs more quads; areas needing more details should've more quads concentrated e.g. ears, eyes, mouth of a human head model
+  * Translate and rotate is generally applied to the object while scale is applied at mesh data within; if there's a scale on the object, usually it's applied (made to 1.0) before editing the mesh data.
+  * Use (a shiny) MatCap to easily and quickly check if a mesh is distorted due to bad topology
+  * Build models to real-world scale. When making small objects, if zooming makes things disappear, give a smaller value to viewport camera's /Clip Start/ (near plane) in /View/.
+  * Shading isn't a binary option though we've Flat and Smooth shading.  With smooth shading ON, some edges/faces can be flat shaded.
+  * When smooth shading, one can have [[https://docs.blender.org/manual/en/latest/modeling/meshes/structure.html#auto-smooth][Auto Smoothing]] if angle between two faces >= some arbitrary angle.  One can also point normals manually with editing tools in /Normals/ menu.
+  * [[https://docs.blender.org/manual/en/latest/modeling/meshes/structure.html#custom-split-normals][Custom Split Normals]] are useful in game development to counter-balance some issues with low-poly objects.  /Split Normals/ from /Normals/ menu might be useful here.
+  * When smooth shading, normals at vertices are averaged, while in flat shading they aren't i.e. all vertices of a face have the same normal = face's normal.  Likewise lighting calculations are not per-face.  [[https://blender.stackexchange.com/q/182378/53932][Unclear]] if it's per-vertex or per-fragment.  Vertex normals and their effects on smooth shading are [[https://www.youtube.com/watch?v=PMgjVJogIbc][illustrated by Andrew Silke]].
+  * If /Smooth Shading/ shades edges that're to be sharp, you can select and mark it sharp from the /Edge/ menu.
+  * When using /Subdivision Surface/ (subsurf) modifier, to keep sharp edges sharp, one has to have [[https://blender.stackexchange.com/q/6425/53932][supporting geometry (or proximity loops or holding edges)]], creases or edges marked sharp with /Edge Split/ modifier.  All three are detailed in [[https://www.youtube.com/watch?v=nBkwodrQq_4][this video]].
+    - One can use Bevel tool to add holding edges to multiple edge loops in one shot; just be mindful that bevel tool can create n-gons on its own
+  * When you're subsurf modelling, start with a lesser number of vertices/segments since the geometry would anyways be doubled (or more) as the modifier is applied
+  * When creating a cylinder, setting vertices (sides) to a factor of 4 is generally good to have it mirrored across X and Y axes.
+    - Bevel cylinder's top/bottom edge loops for clean subsurf application despite n-gon faces; many [[https://blender.stackexchange.com/questions/14579/fill-cylinder-cap-with-quads][other options exist]] too
+  * Before applying modifiers, backup your shapes as you leave non-destructive modelling
+  * /Outset/ (Inset + O) is useful when you want to edge loop (loop cut) around faces that aren't quads.
+  * Inset without Borders to not inset sides having no adjacent faces.
+  * Both /Extrude Along Normal/ and /Extrude Individual/ extrude along the normal, while the latter extrudes each face separately (creating supporting faces per-face). Former can be done by simple extrusion followed by Shrink/Fatten.
+  * [[https://www.youtube.com/watch?v=VtSDpIZ6DiE][Curves can be extruded, beveled or tapered with other curves]] or converted to mesh
+    - Alter their Tilt to change the axis of extrusion
+    - Inkscape's Trace Bitmap is useful make a vector image (SVG) out of a mask image which can be imported into Blender and worked with as a curve
+  * Things that need to follow a path (or curve) like chains, complex tubes, circular stone walls (e.g. well), can be [[https://www.youtube.com/watch?v=oHkzyH9dpv4][done with the /Curve Modifier/]].  Make both (object and curve) origins coincide.
+    - Simple tubes can be done with just curves; the Bevel option in curve data
+  * /Array Modifier/ has a /Fit Type/ which can be set to /Fit Curve/ to make the number of items dynamic based on the curve it fits.  Its /Object Offset/ property can be set to an empty plain axes which can be translated and rotated to adjust the transforms of the sub-parts.  It's very important that empty's origin coincides with object's. For a circular array, set the rotation of the empty to 360/n, where n is the array length.
+  * Empties and guidelines can be represented in different ways in the viewport.  Tweak settings at /Object Properties/ -> /Visibility / Viewport Display/.  Objects can be made non-selectable, rendered always as wireframe, etc.  Grouping all guides under a collection allows easier toggling of visibility.  /Outliner/ allows toggling some of these properties through Filter.
+  * Non-destructive modeling (with modifiers and vertex groups) can be [[https://www.youtube.com/watch?v=PAcTlQWmizo][really interesting]]!  All modifiers are [[https://www.blenderguru.com/articles/blender-101-modifier-encyclopedia][explained in encyclopedia]]
+    - Use /Screw Modifier/ to extrude
+    - Use /Solidify Modifier/ to thicken
+    - Apply /Bevel Modifier/ to specific vertices by putting them in a vertex group
+    - Use /Weld Modifier/ to merge by distance and remove duplicates
+    - Use /Boolean Modifier/ to cut holes
+    - Use /Weighted Normal/ modifier to cure smooth shading artefacts boolean modifier introduces
+    - Use /Screw Modifier/ to make a circle with an edge by sweeping it
+    - Use /Skin Modifier/ to give volume to edges; adding this adds /Radius X & Y/ properties to vertices which can be edited using Ctrl + A in edit mode thereby controlling the volume
+    - /Wireframe modifier/ is useful to make a model out of wireframe
+    - Use /Object Data -> Normals -> Auto Smooth/ to fix shading issues
+    - Make sure you choose the optimal order to the modifiers
+  * /Lattice Modifier/ (Deform) is useful to non-destructively change the overall form of an object giving realism; avoiding perfect geometric forms
+  * Use Object Properties -> Instancing -> Vertices/Faces (called DupliVerts/Duplifaces during 2.7x times) to [[https://www.youtube.com/watch?v=X0JqAF5cvGQ&t=2596s][instance an object across another by parenting it]]
+  * Snap to Volume is useful when rigging to place bones in the exact centre of a volume
+  * [[https://docs.blender.org/manual/en/latest/modeling/meshes/properties/vertex_groups/introduction.html][Vertex Groups]] are useful in doing the following (and more) to a group of vertices
+    - Selecting (frees one from selecting complicated vertex configurations)
+    - [[https://youtu.be/PAcTlQWmizo?t=560][Applying modifiers]] to a particular set of vertices in an object
+    - [[https://youtu.be/luFz5gzvM9s?t=179][Assigning weights]] to different set of vertices (skinning, particles, etc.)
+    - Applying different materials to different parts of a mesh
+  * Object Transforms are relative to its parent frame i.e. location, rotation and scale is determined by how transformed the local frame is w.r.t parent origin; in case an object has no parent it's parented to the world frame e.g. an object location values shows how far off its frame is w.r.t to its parents frame
+    - TRS ordering works in Blender too: an object is first translated to a point, then rotated and finally scaled
+
+* Techniques
+
+  * Transforms can be made to affect only the frame, location and/or parent
+    - Useful in manually repositioning an object's frame
+    - Useful when you know a scale/rotate/shear will put objects in the right place without the deforming effects of the transformation
+  * Different ways of visualizing normals
+    - Viewport Overlays -> Face Orientation (back faces are shaded in red, front in blue)
+    - In Edit Mode, Viewport Overlays -> Normals
+    - Enable Backface Culling in Viewport Shading -> Options
+  * Proportional editing (o) can be selectively turned off for some parts by hiding (h) them
+  * Inset can additionally Extrude and Scale
+    - Press Ctrl to extrude
+    - Leave Ctrl for scale to kick in (or press it again to go back to extrusion)
+  * Extrude can additionally scale too (press S while extruding)
+  * [[https://youtu.be/-EjUnnocGTY?list=PLdFBjtsWmM96iY6Zz67wpv_WhK_1h-11U&t=151][Difference between Fill and Join]]
+    - Fill (f) simply connects vertices with an edge; no faces are made
+    - Join (j) additionally cuts through existing geometry (creating new vertices) the new edge goes along.  Try connecting both diagonals along a quad with both f and g.
+  * [[https://docs.blender.org/manual/en/latest/modeling/meshes/tools/spin.html][Spin tool]] is useful to spin the selection around the 3D cursor, along the view axis; useful to make hoops, etc.
+  * Difference between Spin (Mesh -> Extrude) and Screw (Edge menu): latter allows height change with turns while former allows altering revolution's /angle/. E.g. cup (spin), spring (screw).  The Screw Modifier can achieve both effects.
+  * Quick way to model a sphere with good topology: take a cube, apply subsurf modifier, crank up smoothness to 1.0 and apply cast modifier and make the factor 1.0
+    - Notice that there'd be poles in sphere due to square's corners
+  * /Smooth Vertices/ (not to be confused with Smooth Shading or subsurf smoothing) affects geometry by slanting/relaxing the edge formed by the (smoothened) vertex
+    - It's like adding a subsurf modifier but without the extra geometry
+    - Create a plane, extrude in Z and apply Smooth Vertices; play with Repeat factor
+  * Blender is unique in allowing edit mode across objects
+
+* Add-Ons
+
+** Built-in
+
+  * Auto Mirror
+  * Extra Objects: Single vertex and more
+    - It's Rock Generator uses the Doo-Sabin Subdivision technique to make cube into a rock with mods applied (refer /Mathematical Tools in Computer Graphics with C# Implementations/, §6.5.6 Doo-Sabin Subdivision)
+  * LoopTools: Make circle, curve from selection
+  * F2: Intelligent filling
+  * Auto Tile Size (for Cycles only): Optimal tile size based on CPU specs
+  * [[https://youtu.be/eWNfXjpcLfE?t=130][Edit Linked Library]]
+  * Archimesh/Archipack for architecture modelling
+  * Rigify
+
+** External
+
+  * fSpy: Camera Matching
+  * Object Scatter: scatter an object across another with random rotation and placement
+  * Lily's Surface Scraper
+  * JMesh Tools: Boolean and Bevel
+  * [[https://cgcookie.com/articles/top-10-rigging-animation-addons-for-blender-2-8][Wiggle Bones]], Jiggle Bones and Spring Bones: auto-animates secondary and tertiary bones
+  * Godot Game Tools for Mixamo
+
+* Resources
+
+  * BlendSwap
+  * Adobe Mixamo: free human biped animations
+  * HDRI, Texture and Model Haven for free hdri, textures and models
+  * Pixabay, Unsplash is good for backgrounds
+  * textures.com is good for textures
+  * [[https://www.solarsystemscope.com/textures/][Space Textures]]
+  * [[https://nasa3d.arc.nasa.gov/models][NASA space models]]
