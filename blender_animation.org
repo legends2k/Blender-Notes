@@ -5,7 +5,7 @@
 # refer https://github.com/fniessen/refcard-org-mode for usage with examples
 # another option: https://github.com/gongzhitaao/orgcss
 
-* General Animation
+* General Concepts
 
   * Good to have 30 fps when animating for games since game engines usually up-sample it to 60 fps.  30 is good since it's a multiple of 60; the engine needs to just generate 1 intermediate frame; while for 24 it has to generate 2.4 frames; unclean
   * If you want a 60 frame animation, duplicate key at frame 1 to frame 61 and set the animation to end at frame 60; so the first keyframe isn't played twice and the animation loops seamlessly correctly.  The intermediate key is usually at frame 31.
