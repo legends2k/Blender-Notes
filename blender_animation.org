@@ -87,6 +87,23 @@
       + Cyclic
     - For constant extrapolation on one side and linear on another, set to /Extrapolation Mode/ to /Constant/ and duplicate the first/last keyframe to make the tangent constant on a side
   * Change handle to vector when you want abrupt bouncy animation i.e. the graph should've a [[https://math.stackexchange.com/a/380936][cusp]] e.g. bouncing ball's bounce
+  * Animation is captured in an Action data-block; usually a child of Object
+    - Actions can be assigned to more than on object
+    - Channel names should match exactly between entities to avoid broken channels upon transfer
+      + An object animation uses Loc, Rot and Scale channels; these are the same across different objects
+      + Armature action, though child of armature object, animate bones i.e. operates at the Data level, not Object level; transferring this works only if the bone names match
+  * Dope Sheet and Action Editors are complex versions of Timeline
+    - Timeline, Graph Editor, Dope Sheet respect selected object and its current animation
+    - Action Editor: shows all animation data in the file allowing one to associate an animation with an object
+    - Action Editor: edit one action with channel-level timeline
+    - Timeline: use for simple edits without channel-level timelines
+    - Dope Sheet: shows all objects with their currently associated animation
+      + Useful in making global changes to keys across objects
+  * Video Sequence Editor is a decent audio/video editor
+    - Add streams, snip start or end by dragging respective handles
+    - Snip in the middle with knife
+    - Move streams around by grabbing
+    - Output with /Render Animation/
 
 * Hotkeys
 

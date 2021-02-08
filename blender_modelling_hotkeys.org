@@ -66,8 +66,10 @@
   * View 4 Octants: ~Ctrl + Alt + Q~
   * View Plane Parallel to Selected Face: ~Shift + {7, 1, 3}~
     - ~Ctrl~ to view opposite direction
-  * Last Used Tool Options: ~F9~
   * Repeat Last Operation: ~Shift + R~
+  * Last Used Tool Options: ~F9~
+  * File Context Menu: ~F4~
+  * Open Recent: ~Shift + Ctrl + O~
   * Dissolve Selection: ~Ctrl + X~
   * Normals menu: ~Alt + N~
   * Recalculate Outside: ~Shift + N~

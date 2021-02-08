@@ -21,6 +21,9 @@
   * Eevee :: Real-time rendering engine with PBR support (using OpenGL); akin to ones used in video games
   * Cycles :: Unbiased (physically more accurate compared to Eevee), ray-traced high-realism renderer; similar to the ones used in movies
   * Loft :: bridging edge loops and creating a tubular/bridge-like structure
+  * Link :: allows data-blocks from another file to referred to in current file; can’t edit and needs file path to be maintained
+    - [[https://blender.stackexchange.com/q/23153/53932][Useful in production pipelines]] when different artists work on different things like animation, material, shading, etc.
+  * Append :: copy data-blocks from another file; editable
 
 * Guidelines
 
@@ -54,7 +57,11 @@
   * When creating a cylinder, setting vertices (sides) to a factor of 4 is generally good to have it mirrored across X and Y axes.
     - Bevel cylinder's top/bottom edge loops for clean subsurf application despite n-gon faces; many [[https://blender.stackexchange.com/questions/14579/fill-cylinder-cap-with-quads][other options exist]] too
   * Before applying modifiers, backup your shapes as you leave non-destructive modelling
-  * /Outset/ (Inset + O) is useful when you want to edge loop (loop cut) around faces that aren't quads.
+    - Move them to a /Backup/ collection with /Visibility/ turned off
+  * /Inset/ and [[https://blender.stackexchange.com/q/61430/53932][/Outset/]] are useful when you want to loop cut around non-quad faces.
+  * [[https://blender.stackexchange.com/q/33501/53932][Edge Loop around a triangle fan]]
+    - /Bevel Vertex/ from the central vertex
+    - Select all triangles and inset
   * Inset without Borders to not inset sides having no adjacent faces.
   * Both /Extrude Along Normal/ and /Extrude Individual/ extrude along the normal, while the latter extrudes each face separately (creating supporting faces per-face). Former can be done by simple extrusion followed by Shrink/Fatten.
   * [[https://www.youtube.com/watch?v=VtSDpIZ6DiE][Curves can be extruded, beveled or tapered with other curves]] or converted to mesh
