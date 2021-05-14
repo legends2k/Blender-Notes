@@ -76,3 +76,23 @@
 
 ** Node Wrangler
   * Plug in shader: ~Shift + Ctrl + PMB~
+  * Add /Texture Coordinates/ and /Mapping/ node setup to selected: ~Ctrl + T~
+
+* References
+
+** Videos 
+
+  1. [[https://www.youtube.com/watch?v=yffWd4kI51Q][Top 6 Blender Nodes to Make Any Material]]: Texture Coordinates, ColorRamp, Noise, Voronoi, MixRGB, Bump
+     1. Follow-up: [[https://www.youtube.com/watch?v=z3NHxnoCiwk][6 {nodes, materials, minutes}]]
+  2. [[https://www.youtube.com/watch?v=aq25CWtsLBY][Procedural Rock]]
+  3. [[https://www.youtube.com/watch?v=UzJnsqIRbDw][Procedural Snow]]
+  4. [[https://www.youtube.com/watch?v=If0sa1GZ1J4][Procedural Potatoes]]
+     1. [[https://www.youtube.com/watch?v=yLFA7t5pTbo][More elaborate potato texture node setup]]
+
+** Resources
+
+   * [[https://color.adobe.com][color.adobe.com:]] real world objects with colour shades
+   * https://lospec.com/palette-list: low-poly palettes
+   * [[https://www.youtube.com/watch?v=1jHUY3qoBu8][Flat shading with minimal palette]] by /Imphenzia/
+
+https://lospec.com/palette-list/scenery-28

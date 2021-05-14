@@ -8,6 +8,7 @@
 * General Concepts
 
   * Good to have 30 fps when animating for games since game engines usually up-sample it to 60 fps.  30 is good since it's a multiple of 60; the engine needs to just generate 1 intermediate frame; while for 24 it has to generate 2.4 frames; unclean
+    - Refer [[https://www.peachpit.com/articles/article.aspx?p=22801&seqNum=4][this]] for recommendations on number of frames for standard animations like idle, walk, run, etc.
   * If you want a 60 frame animation, duplicate key at frame 1 to frame 61 and set the animation to end at frame 60; so the first keyframe isn't played twice and the animation loops seamlessly correctly.  The intermediate key is usually at frame 31.
   * Animating lesser number of frames is easier for the animator
   * PlayBlast is playing an animation externally using OpenGL renderer
@@ -139,3 +140,5 @@
   * [[https://docs.blender.org/manual/en/2.91/editors/graph_editor/fcurves/editing.html][Key -> Transform -> Extend]] (relative to mouse and playhead): ~E~
   * Add F-curve modifier: ~Shift + Ctrl + M~
   * Keyframe Easing Type: ~Ctrl + E~
+
+NLA: https://www.youtube.com/watch?v=_9dEqM3H31g

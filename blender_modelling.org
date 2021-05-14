@@ -41,8 +41,10 @@
   * Junctions are created to make edge loops change direction; all-quad junctions are better. Use all-quad junctions with poles to
     - Redirect topology
     - Keep details localized i.e. adding detail in one area of a mesh shouldn't affect other parts of it.  Another option is to make disjoint islands of mesh within the same object e.g. a detailed car handle can be an island not affecting the car.
+    - Refer [[http://www.rbandeira.com/nfos/01_graphisme/polygon_tab_01.php?PHPSESSID=0b2a679609e663fa3d67e2fd294cef9e][3D modelling tables]] for list of situations and solutions
   * It's better to have evenly spaced quads i.e. reasonably square-shaped
   * More details needs more quads; areas needing more details should've more quads concentrated e.g. ears, eyes, mouth of a human head model
+  * When low-poly modelling, one can use Subsurf Modifier, apply it and get enough geometry to work with, make edits and apply Decimate Modifier to get back the low-poly look.
   * Translate and rotate is generally applied to the object while scale is applied at mesh data within; if there's a scale on the object, usually it's applied (made to 1.0) before editing the mesh data.
   * Use (a shiny) MatCap to easily and quickly check if a mesh is distorted due to bad topology
   * Build models to real-world scale. When making small objects, if zooming makes things disappear, give a smaller value to viewport camera's /Clip Start/ (near plane) in /View/.
@@ -104,6 +106,7 @@
     - In Edit Mode, Viewport Overlays -> Normals
     - Enable Backface Culling in Viewport Shading -> Options
   * Proportional editing (o) can be selectively turned off for some parts by hiding (h) them
+    - /Connected Only/ allows localizing edits only to the island
   * Inset can additionally Extrude and Scale
     - Press Ctrl to extrude
     - Leave Ctrl for scale to kick in (or press it again to go back to extrusion)
@@ -152,3 +155,23 @@
   * textures.com is good for textures
   * [[https://www.solarsystemscope.com/textures/][Space Textures]]
   * [[https://nasa3d.arc.nasa.gov/models][NASA space models]]
+
+* Rendering
+
+  * Use /Render Region/ (~Ctrl + B~) when you’re focusing on a region.  This works with /Rendered/ viewport shading and final renders.  Turn off /Compositing/ if unneeded to save time when fixing artefacts.
+    - Make sure to enable camera view before setting region to work in final render
+    - Clear render region ~Ctrl + Alt + B~)
+    - Use /Clip Regions/ (~Alt + B~) to reduce viewport load when working on complex scenes/models
+  * ~Alt + O~ Open and ~Alt + S~ Save in Image Viewer
+  * If you don’t’ve any transparency in your final render, choose RGB instead of RGBA
+    - Choose JPEG directly before initiating render instead of converting PNG to JPEG
+  * Time taken to render can be viewed in /Image Editor/ under /Sidebar panel -> Image -> Metadata/; this metadata also goes into the saved image
+  * Press ~Escape~ while rendering to stop; helpful when /Rendering -> Lock Interface/ is ON
+  * Render into different /Slots/ to do a comparison; toggle b/w slots with ~J~ and ~Alt + J~ or slot number
+  * /Color Management/ under /Render Settings/ can be tweaked to give different looks; the default for /View Transform/ is /Filmic/ which suits 3D work mostly; /Look/ can be set to /High Contrast/ for a more vivid output while for video editing set them to /Standard/ and /None/ since the video is usually 
+
+* Defaults References
+
+- Shadow, Cavity (Both): https://cgcookie.com/lesson/viewport-shading (Jonathan Lampel)
+- Cycles viewport samples, denoising and motion blur: https://www.youtube.com/watch?v=bFAs-0JdYXA (Ryan King)
+

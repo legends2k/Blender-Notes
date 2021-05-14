@@ -19,7 +19,7 @@
   * Loop Cut: ~Ctrl + R~
   * Edge Offset Slide: ~Shift + Ctrl + R~
   * Inset: ~I~
-    - ~O~ outset; ~B~ boundary; ~I~ individual
+    - ~O~ outset; ~I~ individual; ~B~ boundary (needs individual /off/)
     - [[https://cgcookie.com/articles/10-blender-hotkeys-to-boost-your-blender-productivity][hold ~Ctrl~ to extrude + scale]]
   * Bevel Edge/Face: ~Ctrl + B~
   * Bevel Vertex: ~Shift + Ctrl + B~
@@ -37,6 +37,8 @@
   * Rip / Rip-Fill Vertex: ~V~ / ~Alt + V~
   * Mirror Transform: ~Ctrl + M~ + axis
   * Shrink/Flatten: ~Alt + S~
+  * Proportional Editing: ~O~
+    - Toggle /Connect Only/: ~Alt + O~
   * Triangulate: ~Ctrl + T~
   * Tris to Quads: ~Alt + J~
   * Curve/Mesh Conversion: ~Alt + C~
